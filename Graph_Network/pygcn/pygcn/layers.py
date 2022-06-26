@@ -7,18 +7,20 @@ from torch.nn.parameter import Parameter
 
 class GraphConvolution(Module):
     """
-    Simple GCN layer, similar to https://arxiv.org/abs/1609.02907
+    Simple Graph_Network layer, similar to https://arxiv.org/abs/1609.02907
     """
 
     def __init__(self, in_features, out_features, bias=True):
         super(GraphConvolution, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
+        #构造一个权重
         self.weight = Parameter(torch.FloatTensor(in_features, out_features))
         if bias:
             self.bias = Parameter(torch.FloatTensor(out_features))
         else:
             self.register_parameter('bias', None)
+            #对特征进行随机初始化
         self.reset_parameters()
 
     def reset_parameters(self):

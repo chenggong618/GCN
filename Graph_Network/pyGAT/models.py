@@ -20,6 +20,7 @@ class GAT(nn.Module):
 
     def forward(self, x, adj):
         x = F.dropout(x, self.dropout, training=self.training)
+        #将每层的attention进行拼接
         x = torch.cat([att(x, adj) for att in self.attentions], dim=1)
         x = F.dropout(x, self.dropout, training=self.training)
         x = F.elu(self.out_att(x, adj))

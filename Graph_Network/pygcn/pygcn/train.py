@@ -12,9 +12,9 @@ import torch.optim as optim
 from pygcn.pygcn.models import GCN
 from pygcn.pygcn.utils import load_data, accuracy
 
-# Training settings
+# Training settings  argparse--参数解析器，用来方便的读取参数命令行
 parser = argparse.ArgumentParser()
-parser.add_argument('--no-cuda', action='store_true', default=False,
+parser.add_argument('--no_cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
@@ -31,6 +31,7 @@ parser.add_argument('--dropout', type=float, default=0.5,
                     help='Dropout rate (1 - keep probability).')
 
 args = parser.parse_args()
+print(args)
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 
 np.random.seed(args.seed)
@@ -41,7 +42,7 @@ if args.cuda:
 # Load data
 adj, features, labels, idx_train, idx_val, idx_test = load_data()
 
-# Model and optimizer
+# Model and optimizer构造GCN，初始化参数--两层GCN
 model = GCN(nfeat=features.shape[1],
             nhid=args.hidden,
             nclass=labels.max().item() + 1,
@@ -63,6 +64,7 @@ def train(epoch):
     t = time.time()
     model.train()
     optimizer.zero_grad()
+    # 跳到GCN的forword方法里
     output = model(features, adj)
     loss_train = F.nll_loss(output[idx_train], labels[idx_train])
     acc_train = accuracy(output[idx_train], labels[idx_train])

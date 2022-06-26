@@ -45,6 +45,7 @@ adj, features, labels, idx_train, idx_val, idx_test = load_data()
 
 # Model and optimizer
 if args.sparse:
+    #设置GAT模型
     model = SpGAT(nfeat=features.shape[1], 
                 nhid=args.hidden, 
                 nclass=int(labels.max()) + 1, 

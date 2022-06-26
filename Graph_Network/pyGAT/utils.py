@@ -15,27 +15,37 @@ def encode_onehot(labels):
 def load_data(path="./data/cora/", dataset="cora"):
     """Load citation network dataset (cora only for now)"""
     print('Loading {} dataset...'.format(dataset))
-
+    # 从content后缀文件中加载数据
     idx_features_labels = np.genfromtxt("{}{}.content".format(path, dataset), dtype=np.dtype(str))
+    # 索引为第一位到倒数第二位为特征，这一步将特征数据截取下来
     features = sp.csr_matrix(idx_features_labels[:, 1:-1], dtype=np.float32)
+    # 索引为最后一位是标签
     labels = encode_onehot(idx_features_labels[:, -1])
 
-    # build graph
+    """build graph，构建图数据"""
+    #
     idx = np.array(idx_features_labels[:, 0], dtype=np.int32)
+    # 构建一个索引，每个索引对应一个边
     idx_map = {j: i for i, j in enumerate(idx)}
+    # 将后缀为cites里的数据导入，这里的数据是边数据
     edges_unordered = np.genfromtxt("{}{}.cites".format(path, dataset), dtype=np.int32)
+    # 将边用字典当中的索引代替
     edges = np.array(list(map(idx_map.get, edges_unordered.flatten())), dtype=np.int32).reshape(edges_unordered.shape)
+    # 建立边的邻接矩阵
     adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])), shape=(labels.shape[0], labels.shape[0]),
                         dtype=np.float32)
 
-    # build symmetric adjacency matrix
+    # build symmetric adjacency matrix，构建对称矩阵
     adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
 
     features = normalize_features(features)
+    # 对特征进行归一化操作
     adj = normalize_adj(adj + sp.eye(adj.shape[0]))
-
+    # 设置训练集
     idx_train = range(140)
+    # 设置验证集合
     idx_val = range(200, 500)
+    # 设置测试集合
     idx_test = range(500, 1500)
 
     adj = torch.FloatTensor(np.array(adj.todense()))
@@ -48,6 +58,12 @@ def load_data(path="./data/cora/", dataset="cora"):
 
     return adj, features, labels, idx_train, idx_val, idx_test
 
+
+"""
+归一化操作目的：
+采用加法规则时，对于度大的节点特征会越来越大，对于度小的节点却相反，这可能导致网络训练过程当中
+梯度爆炸或者消失问题。
+"""
 
 def normalize_adj(mx):
     """Row-normalize sparse matrix"""
