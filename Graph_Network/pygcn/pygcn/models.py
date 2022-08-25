@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
-from pygcn.pygcn.layers import GraphConvolution
+from Graph_Network.pygcn.pygcn.layers import GraphConvolution
 
 
 class GCN(nn.Module):

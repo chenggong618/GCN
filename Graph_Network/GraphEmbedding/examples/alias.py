@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from ge.alias import alias_sample, create_alias_table
+from Graph_Network.GraphEmbedding.ge.alias import alias_sample, create_alias_table
 
 
 def gen_prob_dist(N):

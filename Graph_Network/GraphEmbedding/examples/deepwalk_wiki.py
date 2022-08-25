@@ -4,8 +4,8 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.manifold import TSNE
 
-from ge import DeepWalk
-from ge.classify import read_node_label, Classifier
+from Graph_Network.GraphEmbedding.ge import DeepWalk
+from Graph_Network.GraphEmbedding.ge.classify import read_node_label, Classifier
 
 
 def evaluate_embeddings(embeddings):

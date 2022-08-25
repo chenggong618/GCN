@@ -9,8 +9,8 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 
-from pygcn.pygcn.models import GCN
-from pygcn.pygcn.utils import load_data, accuracy
+from Graph_Network.pygcn.pygcn.models import GCN
+from Graph_Network.pygcn.pygcn.utils import load_data, accuracy
 
 # Training settings  argparse--参数解析器，用来方便的读取参数命令行
 parser = argparse.ArgumentParser()
