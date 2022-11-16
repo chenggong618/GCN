@@ -38,6 +38,12 @@ def load_data(path="../data/cora/", dataset="cora"):
                         shape=(labels.shape[0], labels.shape[0]),
                         dtype=np.float32)
 
+    # row = np.array([0,2,0])
+    # col = np.array([1,1,0])
+    # data = np.array([1,1,0])
+    # A = sp.coo_matrix((data,(row,col)),shape=(3,3),dtype=float)
+    # B = A.T.multiply(A.T > A)
+    # C = A.multiply(A.T > A)
     # build symmetric adjacency matrix--计算转置矩阵并且构造一个堆成矩阵，这一步相当于把一个有向图转换成无向图
     adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
     #特征归一化
